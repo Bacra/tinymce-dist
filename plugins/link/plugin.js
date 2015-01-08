@@ -352,8 +352,12 @@ tinymce.PluginManager.add('link', function(editor) {
 					return;
 				}
 
-				// Is www. prefixed
-				if (/^\s*www\./i.test(href)) {
+				if (editor.settings.default_link_protocol) {
+					if (!/^\w{2,8}:?\/\//.test(href)) {
+						href = editor.settings.default_link_protocol + '//' + href;
+					}
+				} else if (/^\s*www\./i.test(href)) {
+					// Is www. prefixed
 					delayedConfirm(
 						'The URL you entered seems to be an external link. Do you want to add the required http:// prefix?',
 						function(state) {
